@@ -96,7 +96,7 @@ app.post("/webhook", (req, res) => {
             headers: {
               "Content-Type": "application/json",
               Authorization:
-                "Bearer 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",
+                "Bearer YOUR_OPENAI_API_KEY",
             },
             data: {
               model: "text-davinci-003",
