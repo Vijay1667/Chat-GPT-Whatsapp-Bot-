@@ -53,7 +53,7 @@ app.post("/webhook", (req, res) => {
             headers: {
               "Content-Type": "application/json",
               Authorization:
-                "Bearer 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",
+                "Bearer YOUR_API_KEY",
             },
             data: {
               prompt: msg_body.substring(msg_body.indexOf("/images")+7)+" HD, detailed",
