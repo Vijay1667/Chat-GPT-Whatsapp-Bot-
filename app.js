@@ -21,7 +21,7 @@ const request = require("request"),
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
-
+var messg=[{"role":"system","content":"You are a helpful assistant"}]
 // Accepts POST requests at /webhook endpoint
 app.post("/webhook", (req, res) => {
   // Parse the request body from the POST
@@ -53,7 +53,7 @@ app.post("/webhook", (req, res) => {
             headers: {
               "Content-Type": "application/json",
               Authorization:
-                "Bearer YOUR_API_KEY",
+                "Bearer YOUR_OPENAI_API_KEY",
             },
             data: {
               prompt: msg_body.substring(msg_body.indexOf("/images")+7)+" HD, detailed",
@@ -90,27 +90,29 @@ app.post("/webhook", (req, res) => {
             console.log(err);
           });
         } else {
+          messg.push({"role":"user","content":msg_body})
           await axios({
             method: "POST",
-            url: "https://api.openai.com/v1/completions",
+            url: "https://api.openai.com/v1/chat/completions",
             headers: {
               "Content-Type": "application/json",
               Authorization:
-                "Bearer YOUR_OPENAI_API_KEY",
+                "Bearer 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",
             },
             data: {
-              model: "text-davinci-003",
-              prompt: msg_body,
+              model: "gpt-3.5-turbo",
+              messages: messg,
               temperature: 0.78,
-              max_tokens: 1600,
-              top_p: 1,
+              max_tokens: 2000,
+              top_p: 0.8,
               frequency_penalty: 0,
               presence_penalty: 0,
             },
           })
             .then((response) => {
               console.log(response);
-              msg_openai = response.data.choices[0].text;
+              messg.push({"role":"assistant","content": response.data.choices[0].message.content})
+              msg_openai = response.data.choices[0].message.content;
               console.log(response);
               // console.log(myresp[2])
               // console.log(response.choices[0].text)
@@ -129,7 +131,7 @@ app.post("/webhook", (req, res) => {
             data: {
               messaging_product: "whatsapp",
               to: from,
-              text: { body: msg_body + "\nAnswer:" + msg_openai },
+              text: { body:msg_openai },
             },
             headers: { "Content-Type": "application/json" },
           }).catch((err) => {
