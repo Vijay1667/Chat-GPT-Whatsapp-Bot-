@@ -1,6 +1,6 @@
 # Chat-GPT-Whatsapp-Bot
 Create a project in meta developers website, and then create a webhook in glitch and then follow the documentation.
-!!BOOM!! 
+*!!BOOM!! *
 # 
 The number shown below is a test number provided by whatsapp. you can change that to your own number (but that number should not have any whatsapp account).
 #
